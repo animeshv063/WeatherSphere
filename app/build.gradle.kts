@@ -41,6 +41,7 @@ android {
 
 dependencies {
 
+    implementation("io.coil-kt:coil-compose:2.7.0")
     implementation("com.google.android.gms:play-services-location:21.3.0")
 
     implementation(libs.androidx.core.ktx)
