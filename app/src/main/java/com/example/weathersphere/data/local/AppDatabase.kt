@@ -5,9 +5,12 @@ import androidx.room.Room
 
 object AppDatabase {
 
+    @Volatile
     private var INSTANCE: WeatherDatabase? = null
 
-    fun getDatabase(context: Context): WeatherDatabase {
+    fun getDatabase(
+        context: Context
+    ): WeatherDatabase {
 
         return INSTANCE ?: synchronized(this) {
 
@@ -23,4 +26,3 @@ object AppDatabase {
         }
     }
 }
-

@@ -10,15 +10,20 @@ class LocationHelper(
 
     @SuppressLint("MissingPermission")
     fun getCurrentLocation(
-        onLocationReceived: (Double, Double) -> Unit
+        onSuccess: (Double, Double) -> Unit
     ) {
-        val client = LocationServices.getFusedLocationProviderClient(context)
 
-        client.lastLocation.addOnSuccessListener { location ->
-            if (location != null) {
-                onLocationReceived(
-                    location.latitude,
-                    location.longitude
+        val client =
+            LocationServices
+                .getFusedLocationProviderClient(context)
+
+        client.lastLocation.addOnSuccessListener {
+
+            if (it != null) {
+
+                onSuccess(
+                    it.latitude,
+                    it.longitude
                 )
             }
         }

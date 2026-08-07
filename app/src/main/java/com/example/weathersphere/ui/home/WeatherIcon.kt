@@ -6,11 +6,13 @@ import coil.compose.AsyncImage
 
 @Composable
 fun WeatherIcon(
-    iconUrl: String
+    iconUrl: String,
+    modifier: Modifier = Modifier
 ) {
+
     AsyncImage(
         model = "https:$iconUrl",
         contentDescription = "Weather Icon",
-        modifier = Modifier
+        modifier = modifier
     )
 }

@@ -1,11 +1,12 @@
 plugins {
     alias(libs.plugins.android.application)
+    alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.ksp)
 }
 
 android {
     namespace = "com.example.weathersphere"
-
     compileSdk = 36
 
     defaultConfig {
@@ -29,10 +30,13 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_21
+        targetCompatibility = JavaVersion.VERSION_21
     }
 
+    kotlin {
+        jvmToolchain(21)
+    }
 
     buildFeatures {
         compose = true
@@ -40,10 +44,10 @@ android {
 }
 
 dependencies {
+    implementation(libs.room.runtime)
+    implementation(libs.room.ktx)
 
-    implementation("io.coil-kt:coil-compose:2.7.0")
-    implementation("com.google.android.gms:play-services-location:21.3.0")
-
+    ksp(libs.room.compiler)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
@@ -75,6 +79,8 @@ dependencies {
     implementation(libs.accompanist.permissions)
 
     implementation(libs.lottie.compose)
+    
+    implementation(libs.play.services.location)
 
     testImplementation(libs.junit)
 

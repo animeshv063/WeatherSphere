@@ -1,24 +1,52 @@
 package com.example.weathersphere.navigation
 
 import androidx.compose.runtime.Composable
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
-import com.example.weathersphere.ui.splash.SplashScreen
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.weathersphere.ui.about.AboutScreen
+import com.example.weathersphere.ui.favorites.FavoritesScreen
+import com.example.weathersphere.ui.home.HomeScreen
+import com.example.weathersphere.ui.settings.SettingsScreen
+import com.example.weathersphere.viewmodel.WeatherViewModel
 
 @Composable
-fun NavGraph() {
+fun NavGraph(
+    selectedIndex: Int
+) {
 
-    val navController = rememberNavController()
+    val viewModel: WeatherViewModel = viewModel()
 
-    NavHost(
-        navController = navController,
-        startDestination = "splash"
-    ) {
+    val uiState by viewModel.uiState.collectAsState()
 
-        composable("splash") {
-            SplashScreen()
+    when (selectedIndex) {
+
+        0 -> {
+            HomeScreen(
+                uiState = uiState,
+                onSearch = {
+                    viewModel.searchCity(it)
+                }
+            )
+        }
+
+        1 -> {
+            FavoritesScreen(
+                favorites = uiState.favorites
+            )
+        }
+
+        2 -> {
+            SettingsScreen(
+                isCelsius = uiState.isCelsius,
+                onUnitChanged = { isCelsius ->
+                    viewModel.changeTemperatureUnit(isCelsius)
+                }
+            )
+        }
+
+        3 -> {
+            AboutScreen()
         }
     }
-
 }

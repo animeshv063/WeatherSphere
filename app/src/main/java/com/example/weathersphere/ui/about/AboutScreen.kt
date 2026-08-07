@@ -1,20 +1,16 @@
-package com.example.weathersphere.ui.settings
+package com.example.weathersphere.ui.about
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 
 @Composable
-fun SettingsScreen(
-    isCelsius: Boolean,
-    onUnitChanged: (Boolean) -> Unit
-) {
+fun AboutScreen() {
 
     Column(
         modifier = Modifier.fillMaxSize(),
@@ -23,17 +19,16 @@ fun SettingsScreen(
     ) {
 
         Text(
-            text = "Settings",
+            text = "WeatherSphere",
             style = MaterialTheme.typography.headlineMedium
         )
 
-        Text(
-            text = "Use Celsius"
-        )
+        Text("Version 1.0")
 
-        Switch(
-            checked = isCelsius,
-            onCheckedChange = onUnitChanged
-        )
+        Text("Jetpack Compose")
+
+        Text("FastAPI Backend")
+
+        Text("Developed by Animesh")
     }
 }

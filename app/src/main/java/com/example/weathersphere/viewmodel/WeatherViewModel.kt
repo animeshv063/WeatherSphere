@@ -2,11 +2,9 @@ package com.example.weathersphere.viewmodel
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.weathersphere.data.local.AppDatabase
 import com.example.weathersphere.data.local.FavoriteCity
-import com.example.weathersphere.data.model.WeatherResponse
 import com.example.weathersphere.data.repository.WeatherRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -17,46 +15,115 @@ class WeatherViewModel(
 ) : AndroidViewModel(application) {
 
     private val repository = WeatherRepository(
-        AppDatabase.getDatabase(getApplication()).favoriteCityDao()
+        AppDatabase.getDatabase(
+            getApplication()
+        ).favoriteCityDao()
     )
 
-    private val _uiState = MutableStateFlow(WeatherUiState())
-    val uiState: StateFlow<WeatherUiState> = _uiState
+    private val _uiState =
+        MutableStateFlow(
+            WeatherUiState()
+        )
 
-    fun getCurrentWeather(city: String) {
+    val uiState: StateFlow<WeatherUiState>
+            = _uiState
+
+    fun searchCity(
+        city: String
+    ) {
+
         viewModelScope.launch {
 
-            _uiState.value = WeatherUiState(isLoading = true)
+            _uiState.value =
+                _uiState.value.copy(
+                    isLoading = true,
+                    error = null
+                )
 
             try {
-                val weather = repository.getCurrentWeather(city)
 
-                _uiState.value = WeatherUiState(
-                    weather = weather
-                )
+                val weather =
+                    repository.getCurrentWeather(city)
+
+                val hourly =
+                    repository.getHourlyForecast(city)
+
+                val weekly =
+                    repository.getWeeklyForecast(city)
+
+                val favorites =
+                    repository.getFavorites()
+
+                _uiState.value =
+                    _uiState.value.copy(
+
+                        isLoading = false,
+
+                        weather = weather,
+
+                        hourlyForecast =
+                            hourly.forecast.forecastday.first().hour,
+
+                        weeklyForecast =
+                            weekly.forecast.forecastday,
+
+                        favorites = favorites
+                    )
+
             } catch (e: Exception) {
-                _uiState.value = WeatherUiState(
-                    error = e.message ?: "Unknown error"
-                )
+
+                _uiState.value =
+                    _uiState.value.copy(
+
+                        isLoading = false,
+
+                        error = e.message
+                    )
             }
         }
     }
 
-    fun searchCity(city: String) {
-        getCurrentWeather(city)
-    }
+    fun saveFavorite(
+        city: String
+    ) {
 
-    fun saveFavorite(city: String) {
         viewModelScope.launch {
+
             repository.insertFavorite(
-                FavoriteCity(city = city)
+                FavoriteCity(
+                    city = city
+                )
             )
-        }
-    }
-    fun deleteFavorite(city: FavoriteCity) {
-        viewModelScope.launch {
-            repository.deleteFavorite(city)
+
+            _uiState.value =
+                _uiState.value.copy(
+                    favorites =
+                        repository.getFavorites()
+                )
         }
     }
 
+    fun deleteFavorite(
+        city: FavoriteCity
+    ) {
+
+        viewModelScope.launch {
+
+            repository.deleteFavorite(city)
+
+            _uiState.value =
+                _uiState.value.copy(
+                    favorites =
+                        repository.getFavorites()
+                )
+        }
+    }
+    fun changeTemperatureUnit(
+        isCelsius: Boolean
+    ) {
+        _uiState.value =
+            _uiState.value.copy(
+                isCelsius = isCelsius
+            )
+    }
 }
