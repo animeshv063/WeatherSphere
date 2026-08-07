@@ -126,4 +126,35 @@ class WeatherViewModel(
                 isCelsius = isCelsius
             )
     }
+    fun searchSuggestions(
+        query: String
+    ) {
+
+        if (query.isBlank()) {
+
+            _uiState.value =
+                _uiState.value.copy(
+                    suggestions = emptyList()
+                )
+
+            return
+        }
+
+        viewModelScope.launch {
+
+            try {
+
+                _uiState.value =
+                    _uiState.value.copy(
+                        suggestions =
+                            repository.searchCities(query)
+                    )
+
+            } catch (_: Exception) {
+
+            }
+
+        }
+
+    }
 }

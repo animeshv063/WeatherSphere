@@ -1,5 +1,6 @@
 package com.example.weathersphere.data.api
 
+import com.example.weathersphere.data.model.CitySuggestion
 import com.example.weathersphere.data.model.HourlyForecastResponse
 import com.example.weathersphere.data.model.WeatherResponse
 import com.example.weathersphere.data.model.WeeklyForecastResponse
@@ -29,4 +30,9 @@ interface WeatherApiService {
         @Query("latitude") latitude: Double,
         @Query("longitude") longitude: Double
     ): WeatherResponse
+
+    @GET("weather/search")
+    suspend fun searchCities(
+        @Query("query") query: String
+    ): List<CitySuggestion>
 }

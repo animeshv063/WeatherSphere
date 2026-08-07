@@ -4,6 +4,7 @@ import com.example.weathersphere.data.local.FavoriteCity
 import com.example.weathersphere.data.model.Hour
 import com.example.weathersphere.data.model.WeatherResponse
 import com.example.weathersphere.data.model.WeekDay
+import com.example.weathersphere.data.model.CitySuggestion
 
 data class WeatherUiState(
 
@@ -19,5 +20,7 @@ data class WeatherUiState(
 
     val isCelsius: Boolean = true,
 
-    val error: String? = null
+    val error: String? = null,
+
+    val suggestions: List<CitySuggestion> = emptyList(),
 )

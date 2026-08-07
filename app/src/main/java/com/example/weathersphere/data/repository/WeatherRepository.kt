@@ -3,6 +3,7 @@ package com.example.weathersphere.data.repository
 import com.example.weathersphere.data.api.RetrofitInstance
 import com.example.weathersphere.data.local.FavoriteCity
 import com.example.weathersphere.data.local.FavoriteCityDao
+import com.example.weathersphere.data.model.CitySuggestion
 import com.example.weathersphere.data.model.HourlyForecastResponse
 import com.example.weathersphere.data.model.WeatherResponse
 import com.example.weathersphere.data.model.WeeklyForecastResponse
@@ -57,5 +58,13 @@ class WeatherRepository(
 
     suspend fun getFavorites(): List<FavoriteCity> {
         return favoriteCityDao.getAllCities()
+    }
+
+    suspend fun searchCities(
+        query: String
+    ): List<CitySuggestion> {
+
+        return RetrofitInstance.api.searchCities(query)
+
     }
 }

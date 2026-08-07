@@ -24,15 +24,27 @@ fun NavGraph(
         0 -> {
             HomeScreen(
                 uiState = uiState,
+
                 onSearch = {
                     viewModel.searchCity(it)
+                },
+
+                onTyping = {
+                    viewModel.searchSuggestions(it)
+                },
+
+                onAddFavorite = {
+                    viewModel.saveFavorite(it)
                 }
             )
         }
 
         1 -> {
             FavoritesScreen(
-                favorites = uiState.favorites
+                favorites = uiState.favorites,
+                onDelete = {
+                    viewModel.deleteFavorite(it)
+                }
             )
         }
 
